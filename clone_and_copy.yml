@@ -1,0 +1,33 @@
+---
+- name: Clone repository from Bitbucket and copy to a specific path
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    bitbucket_repo_url: "https://bitbucket.org/your-username/your-repo.git"
+    destination_path: "/desired/destination/path"
+    temp_clone_path: "/tmp/bitbucket_repo"
+
+  tasks:
+    - name: Ensure the destination directory exists
+      file:
+        path: "{{ destination_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Clone the Bitbucket repository to a temporary path
+      git:
+        repo: "{{ bitbucket_repo_url }}"
+        dest: "{{ temp_clone_path }}"
+        force: yes
+
+    - name: Copy the repository to the destination path
+      copy:
+        src: "{{ temp_clone_path }}/"
+        dest: "{{ destination_path }}"
+        remote_src: yes
+
+    - name: Clean up the temporary clone directory
+      file:
+        path: "{{ temp_clone_path }}"
+        state: absent
