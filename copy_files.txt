@@ -1,0 +1,23 @@
+Explanation:
+Define source and destination directories: Update the SOURCE_DIR and DEST_DIR variables to the paths of your source and destination directories.
+
+Get today's date and time: The DATE variable is set to the current date and time in the format YYYYMMDD_HHMMSS.
+
+process_files function: This function processes files recursively. It takes one argument, the current directory to process.
+
+If the current item is a directory, it calls itself recursively to process the contents.
+If the current item is a file, it performs the required checks and operations:
+Constructs the relative path and the destination path.
+Checks if the file exists in the destination directory.
+If a backup file (_BKP) exists, renames it with today's date and time.
+Renames the existing file in the destination directory to _BKP.
+Ensures the destination directory exists and copies the file from the source to the destination.
+Start processing from the source directory: Calls the process_files function with the SOURCE_DIR.
+
+Usage:
+Save the script to a file, e.g., copy_files.sh.
+Make the script executable:
+chmod +x copy_files.sh
+Run the script
+./copy_files.sh
+Make sure to replace /path/to/source and /path/to/destination with the actual paths to your source and destination directories. This script will recursively process all files and directories under the source directory and perform the specified operations.
