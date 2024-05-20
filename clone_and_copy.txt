@@ -1,0 +1,16 @@
+Explanation:
+hosts: localhost: This playbook is set to run on the localhost.
+vars: Variables are defined for the Bitbucket repository URL, the destination path, and a temporary path to clone the repository.
+Ensure the destination directory exists: Creates the destination directory if it does not already exist.
+Clone the Bitbucket repository to a temporary path: Uses the git module to clone the repository to a temporary location.
+Copy the repository to the destination path: Copies the contents of the cloned repository to the destination path.
+Clean up the temporary clone directory: Removes the temporary directory used for cloning the repository.
+Prerequisites:
+Ensure that git is installed on your local machine.
+Ensure you have access to the Bitbucket repository, potentially using SSH keys or HTTP credentials if required.
+You can save this playbook as clone_and_copy.yml and run it using the following command:
+
+sh
+Copy code
+ansible-playbook clone_and_copy.yml
+Make sure to adjust the bitbucket_repo_url and destination_path
