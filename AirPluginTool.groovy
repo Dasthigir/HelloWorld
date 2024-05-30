@@ -9,7 +9,9 @@
 * U.S. Government Users Restricted Rights - Use, duplication or disclosure restricted by
 * GSA ADP Schedule Contract with IBM Corp.
 */
-package com.urbancode.air;
+package com.urbancode.air
+
+import java.util.Properties
 
 public class AirPluginTool {
 
@@ -21,66 +23,54 @@ public class AirPluginTool {
     // INSTANCE
     //**************************************************************************
     
-    final public def isWindows = (System.getProperty('os.name') =~ /(?i)windows/).find()
+    final boolean isWindows = System.getProperty('os.name') =~ /(?i)windows/
 
-    def out = System.out;
-    def err = System.err;
+    def out = System.out
+    def err = System.err
 
-    private def inPropsFile;
-    private def outPropsFile;
+    private File inPropsFile
+    private File outPropsFile
 
-    def outProps;
+    Properties outProps
 
-    public AirPluginTool(def inFile, def outFile){
-        inPropsFile = inFile;
-        outPropsFile = outFile;
-        outProps = new Properties();
+    AirPluginTool(File inFile, File outFile) {
+        inPropsFile = inFile
+        outPropsFile = outFile
+        outProps = new Properties()
     }
 
-    public Properties getStepProperties() {
-        def props = new Properties();
-        final def inputPropsFile = this.inPropsFile;
-        final def inputPropsStream = null;
-        try {
-            inputPropsStream = new FileInputStream(inputPropsFile);
-            props.load(inputPropsStream);
+    Properties getStepProperties() {
+        Properties props = new Properties()
+        try (FileInputStream inputPropsStream = new FileInputStream(inPropsFile)) {
+            props.load(inputPropsStream)
+        } catch (IOException e) {
+            throw new RuntimeException(e)
         }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            inputPropsStream.close();
-        }
-        return props;
+        return props
     }
 
-    public void setOutputProperty(String name, String value) {
-        this.outProps.setProperty(name, value);
+    void setOutputProperty(String name, String value) {
+        outProps.setProperty(name, value)
     }
 
-    public void setOutputProperties() {
-        final OutputStream outputPropsStream = null;
-        try {
-            outputPropsStream = new FileOutputStream(this.outPropsFile);
-            outProps.store(outputPropsStream, "");
-        }
-        finally {
-            if (outputPropsStream != null) {
-                outputPropsStream.close();
-            }   
+    void setOutputProperties() {
+        try (FileOutputStream outputPropsStream = new FileOutputStream(outPropsFile)) {
+            outProps.store(outputPropsStream, "")
+        } catch (IOException e) {
+            throw new RuntimeException(e)
         }
     }
 
-    public String getAuthToken() {
-        String authToken = System.getenv("AUTH_TOKEN");
-        return "{\"token\" : \"" + authToken + "\"}";
+    String getAuthToken() {
+        String authToken = System.getenv("AUTH_TOKEN")
+        return "{\"token\" : \"${authToken}\"}"
     }
 
-    public String getAuthTokenUsername() {
-        return "PasswordIsAuthToken";
+    String getAuthTokenUsername() {
+        return "PasswordIsAuthToken"
     }
 
-    public void storeOutputProperties() {
-        setOutputProperties();
+    void storeOutputProperties() {
+        setOutputProperties()
     }
 }
